@@ -48,7 +48,7 @@ public interface UsuarioService {
      * @param id      Identificador único del usuario a actualizar.
      * @param usuario El objeto Usuario con los nuevos datos del usuario.
      * @return El usuario actualizado.
-     * @throws EntityNotFoundException Si no se encuentra ningún usuario con el identificador especificado.
+     * @throws EntityNotFoundException   Si no se encuentra ningún usuario con el identificador especificado.
      * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de actualización del usuario.
      */
     Usuario update(Long id, Usuario usuario) throws EntityNotFoundException, IllegalOperationException;
@@ -58,7 +58,6 @@ public interface UsuarioService {
      *
      * @param id Identificador único del usuario a eliminar.
      * @throws EntityNotFoundException Si no se encuentra ningún usuario con el identificador especificado.
-     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de eliminación del usuario.
      */
-    void delete(Long id) throws EntityNotFoundException, IllegalOperationException;
+    void delete(Long id) throws EntityNotFoundException;
 }
