@@ -5,6 +5,7 @@
  */
 package edu.unc.auth_eventos.service;
 
+import edu.unc.auth_eventos.entity.Rol;
 import edu.unc.auth_eventos.entity.Usuario;
 import edu.unc.auth_eventos.exception.IllegalOperationException;
 import edu.unc.auth_eventos.repository.UsuarioRepository;
@@ -26,6 +27,9 @@ public class UsuarioServiceImp implements UsuarioService {
      */
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RolService rolService;
 
     /**
      * Obtiene todos los usuarios en el sistema.
@@ -62,9 +66,14 @@ public class UsuarioServiceImp implements UsuarioService {
      */
     @Override
     public Usuario save(Usuario usuario) throws IllegalOperationException {
+        Rol rol = rolService.getById(usuario.getRol().getIdRol());
+        if (rol == null) {
+            throw new IllegalOperationException("El rol proporcionado no existe.");
+        }
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             throw new IllegalOperationException("El correo electrónico proporcionado ya está en uso.");
         }
+        usuario.setRol(rol);
         return usuarioRepository.save(usuario);
     }
 
@@ -83,9 +92,14 @@ public class UsuarioServiceImp implements UsuarioService {
         if (usuarioOpt.isEmpty()) {
             throw new EntityNotFoundException("El usuario con el Id proporcionado no se encontró.");
         }
-        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
-            throw new IllegalOperationException("El correo electrónico proporcionado ya está en uso.");
+//        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
+//            throw new IllegalOperationException("El correo electrónico proporcionado ya está en uso.");
+//        }
+        Rol rol = rolService.getById(usuario.getRol().getIdRol());
+        if (rol == null) {
+            throw new IllegalOperationException("El rol proporcionado no existe.");
         }
+        usuario.setRol(rol);
         usuario.setIdUsuario(id);
         return usuarioRepository.save(usuario);
     }

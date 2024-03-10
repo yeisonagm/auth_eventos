@@ -8,6 +8,7 @@ package edu.unc.auth_eventos.dto;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -38,6 +39,6 @@ public class UsuarioRequestDTO {
     /**
      * El rol del usuario.
      */
-    @NotBlank(message = "El rol no puede estar vacío.")
+    @NotNull(message = "El rol no puede estar vacío.")
     private RolDTO rol;
 }
