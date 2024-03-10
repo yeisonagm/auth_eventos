@@ -32,6 +32,7 @@ public class Usuario {
     /**
      * El email del usuario.
      */
+    @Column(unique = true)
     private String email;
 
     /**

@@ -34,6 +34,7 @@ public class Rol {
     /**
      * El nombre del rol.
      */
+    @Column(unique = true)
     private String nombre;
 
     /**

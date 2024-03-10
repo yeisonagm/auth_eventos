@@ -6,6 +6,7 @@
 package edu.unc.auth_eventos.service;
 
 import edu.unc.auth_eventos.entity.Usuario;
+import edu.unc.auth_eventos.exception.IllegalOperationException;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
@@ -37,9 +38,9 @@ public interface UsuarioService {
      *
      * @param usuario El usuario a guardar.
      * @return El usuario guardado.
-     *
+     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de guardado del usuario.
      */
-    Usuario save(Usuario usuario);//Faltaba agregar el illegalOperationException
+    Usuario save(Usuario usuario) throws IllegalOperationException;
 
     /**
      * Actualiza un usuario existente en el sistema.
@@ -47,15 +48,17 @@ public interface UsuarioService {
      * @param id      Identificador único del usuario a actualizar.
      * @param usuario El objeto Usuario con los nuevos datos del usuario.
      * @return El usuario actualizado.
-     * @throws EntityNotFoundException  Si no se encuentra ningún usuario con el identificador especificado.
+     * @throws EntityNotFoundException Si no se encuentra ningún usuario con el identificador especificado.
+     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de actualización del usuario.
      */
-    Usuario update(Long id, Usuario usuario) throws EntityNotFoundException;
+    Usuario update(Long id, Usuario usuario) throws EntityNotFoundException, IllegalOperationException;
 
     /**
      * Elimina un usuario del sistema por su identificador único.
      *
      * @param id Identificador único del usuario a eliminar.
      * @throws EntityNotFoundException Si no se encuentra ningún usuario con el identificador especificado.
+     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de eliminación del usuario.
      */
-    void delete(Long id) throws EntityNotFoundException;
+    void delete(Long id) throws EntityNotFoundException, IllegalOperationException;
 }

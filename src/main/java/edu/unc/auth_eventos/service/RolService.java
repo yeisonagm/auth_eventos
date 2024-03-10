@@ -6,6 +6,7 @@
 package edu.unc.auth_eventos.service;
 
 import edu.unc.auth_eventos.entity.Rol;
+import edu.unc.auth_eventos.exception.IllegalOperationException;
 import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
@@ -37,8 +38,9 @@ public interface RolService {
      *
      * @param rol El rol a guardar.
      * @return El rol guardado.
+     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de guardado del rol.
      */
-    Rol save(Rol rol);//Faltaba agregar el illegalOperationException
+    Rol save(Rol rol) throws IllegalOperationException
 
     /**
      * Actualiza un rol existente en el sistema.
@@ -46,9 +48,8 @@ public interface RolService {
      * @param id  Identificador único del rol a actualizar.
      * @param rol El objeto Rol con los nuevos datos del rol.
      * @return El rol actualizado.
-     * @throws EntityNotFoundException  Si no se encuentra ningún rol con el identificador especificado.
+     * @throws EntityNotFoundException   Si no se encuentra ningún rol con el identificador especificado.
+     * @throws IllegalOperationException Si ocurre una operación ilegal durante el proceso de actualización del rol.
      */
-    Rol update(Long id, Rol rol) throws EntityNotFoundException;
-
-
+    Rol update(Long id, Rol rol) throws EntityNotFoundException, IllegalOperationException;
 }
