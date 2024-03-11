@@ -15,6 +15,7 @@ import edu.unc.auth_eventos.util.EntityValidator;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -80,7 +81,7 @@ public class RolController {
         if (result.hasErrors()) return new EntityValidator().validate(result);
         Rol rol = modelMapper.map(rolDTO, Rol.class);
         Rol rolSaved = rolService.save(rol);
-        return ResponseEntity.ok(new ApiResponse<>(
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(
                 true,
                 "Rol guardado",
                 modelMapper.map(rolSaved, RolDTO.class)));
@@ -95,13 +96,13 @@ public class RolController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody @Valid RolDTO rolDTO, BindingResult result)
-    throws EntityNotFoundException, IllegalOperationException {
+            throws EntityNotFoundException, IllegalOperationException {
         if (result.hasErrors()) return new EntityValidator().validate(result);
 
         Rol rol = modelMapper.map(rolDTO, Rol.class);
         rol.setIdRol(id);
         Rol rolUpdated = rolService.save(rol);
-        return ResponseEntity.ok(new ApiResponse<>(
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 true,
                 "Rol actualizado",
                 modelMapper.map(rolUpdated, RolDTO.class)));

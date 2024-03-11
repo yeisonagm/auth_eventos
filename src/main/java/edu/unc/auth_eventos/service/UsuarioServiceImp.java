@@ -11,6 +11,7 @@ import edu.unc.auth_eventos.exception.IllegalOperationException;
 import edu.unc.auth_eventos.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +31,9 @@ public class UsuarioServiceImp implements UsuarioService {
 
     @Autowired
     private RolService rolService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Obtiene todos los usuarios en el sistema.
@@ -73,6 +77,7 @@ public class UsuarioServiceImp implements UsuarioService {
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             throw new IllegalOperationException("El correo electrónico proporcionado ya está en uso.");
         }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuario.setRol(rol);
         return usuarioRepository.save(usuario);
     }
@@ -92,13 +97,11 @@ public class UsuarioServiceImp implements UsuarioService {
         if (usuarioOpt.isEmpty()) {
             throw new EntityNotFoundException("El usuario con el Id proporcionado no se encontró.");
         }
-//        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
-//            throw new IllegalOperationException("El correo electrónico proporcionado ya está en uso.");
-//        }
         Rol rol = rolService.getById(usuario.getRol().getIdRol());
         if (rol == null) {
             throw new IllegalOperationException("El rol proporcionado no existe.");
         }
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         usuario.setRol(rol);
         usuario.setIdUsuario(id);
         return usuarioRepository.save(usuario);
