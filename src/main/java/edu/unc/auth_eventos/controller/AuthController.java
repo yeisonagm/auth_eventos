@@ -49,11 +49,10 @@ public class AuthController {
         if (result.hasErrors()) return new EntityValidator().validate(result);
 
         Usuario usuario = modelMapper.map(userLogin, Usuario.class);
-        String token = authService.login(usuario);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse<>(
                 true,
                 "Token generado correctamente",
-                token));
+                authService.login(usuario)));
     }
 
     /**

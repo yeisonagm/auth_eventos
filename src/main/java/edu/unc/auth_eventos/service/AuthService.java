@@ -5,6 +5,7 @@
  */
 package edu.unc.auth_eventos.service;
 
+import edu.unc.auth_eventos.dto.LoginResponse;
 import edu.unc.auth_eventos.entity.Usuario;
 import edu.unc.auth_eventos.exception.IllegalOperationException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +20,7 @@ public interface AuthService {
      * @param usuario con la información de login.
      * @return El token de autenticación.
      */
-    String login(Usuario usuario) throws BadCredentialsException;
+    LoginResponse login(Usuario usuario) throws BadCredentialsException;
 
     /**
      * Método para registrar un nuevo usuario.
@@ -27,7 +28,7 @@ public interface AuthService {
      * @param usuario con la información de registro.
      * @return El token de autenticación.
      */
-    String register(Usuario usuario) throws IllegalOperationException;
+    LoginResponse register(Usuario usuario) throws IllegalOperationException;
 
     /**
      * Método para buscar un usuario por email.

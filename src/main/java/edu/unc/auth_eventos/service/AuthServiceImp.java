@@ -6,6 +6,7 @@
 package edu.unc.auth_eventos.service;
 
 import edu.unc.auth_eventos.config.CustomUserDetails;
+import edu.unc.auth_eventos.dto.LoginResponse;
 import edu.unc.auth_eventos.entity.Rol;
 import edu.unc.auth_eventos.entity.Usuario;
 import edu.unc.auth_eventos.exception.IllegalOperationException;
@@ -47,14 +48,17 @@ public class AuthServiceImp implements AuthService {
      * @return El token de autenticación.
      */
     @Override
-    public String login(Usuario usuario) throws BadCredentialsException {
+    public LoginResponse login(Usuario usuario) throws BadCredentialsException {
         Usuario usuarioDB = usuarioRepository.findByEmail(usuario.getEmail());
         if (usuarioDB == null || !passwordEncoder.matches(usuario.getPassword(), usuarioDB.getPassword())) {
-            throw new BadCredentialsException("Credenciales inválidas.");
+            throw new BadCredentialsException("La credenciales son incorrectas.");
         }
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario.getEmail(), usuario.getPassword()));
-        return jwtService.getToken(new CustomUserDetails(usuarioDB));
+        return new LoginResponse(
+                usuario.getEmail(),
+                usuarioDB.getRol().getNombre(),
+                jwtService.getToken(new CustomUserDetails(usuarioDB)));
     }
 
     /**
@@ -64,18 +68,23 @@ public class AuthServiceImp implements AuthService {
      * @return El token de autenticación.
      */
     @Override
-    public String register(Usuario usuario) throws IllegalOperationException {
+    public LoginResponse register(Usuario usuario) throws IllegalOperationException {
         if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
             throw new IllegalOperationException("El email ya está registrado.");
         }
+
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         Rol rol = rolRepository.findByNombre("Cliente");
-        if (rol != null) {
-            usuario.setRol(rol);
+        if (rol == null) {
+            throw new IllegalOperationException("No se puede crear un 'cliente', debido a que el rol no existe.");
         }
 
+        usuario.setRol(rol);
         usuarioRepository.save(usuario);
-        return jwtService.getToken(new CustomUserDetails(usuario));
+        return new LoginResponse(
+                usuario.getEmail(),
+                usuario.getRol().getNombre(),
+                jwtService.getToken(new CustomUserDetails(usuario)));
     }
 
     /**
