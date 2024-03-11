@@ -46,7 +46,7 @@ public class Usuario {
      * La anotación {@code @ManyToOne} indica que esta relación es de muchos a uno.
      * La anotación {@code @JoinColumn} indica que el campo que se utilizará para la relación es el campo id_rol.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_rol")
     private Rol rol;
 }
